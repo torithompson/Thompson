@@ -1,0 +1,20 @@
+body {
+  background-color: powderblue;
+  font-family: "Lucida Sans", "Lucida Sans Regular", "Lucida Grande";
+}
+
+table {
+  border-collapse: collapse;
+  width: 80%;
+  border: 1px solid black;
+}
+
+th,
+td {
+  text-align: left;
+  padding: 8px;
+}
+
+tr:nth-child(even) {
+  background-color: #f2f2f2;
+}
