@@ -1,5 +1,5 @@
 body {
-  background-color: powderblue;
+  background-color: white;
   font-family: "Lucida Sans", "Lucida Sans Regular", "Lucida Grande";
 }
 
@@ -16,5 +16,5 @@ td {
 }
 
 tr:nth-child(even) {
-  background-color: #f2f2f2;
+  background-color: powderblue;
 }
