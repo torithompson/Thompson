@@ -17,12 +17,20 @@ import java.util.HashMap;
  */
 public class App {
     public static void main(String[] args) throws Exception {
+        // word file
         ArrayList<String> words = readWords("res/words.txt");
         HashMap<String, Integer> wordCount = buildHashmap(words);
-        createHTMLFileHashmap(wordCount);
+        createHTMLFileHashmap(wordCount, "res/wordCount.html");
         ArrayList<WordFrequency> frequency = buildWordFrequencyList(wordCount);
         Collections.sort(frequency);
-        createHTMLFileArray(frequency);
+        createHTMLFileArray(frequency, "res/sorted.html");
+        // parahraph file
+        ArrayList<String> paragraph = readWords("res/paragraph.txt");
+        HashMap<String, Integer> paragraphCount = buildHashmap(paragraph);
+        createHTMLFileHashmap(paragraphCount, "res/paragraph.html");
+        ArrayList<ParagraphFrequency> paragraphFrequency = buildParagraphFrequencyList(paragraphCount);
+        Collections.sort(paragraphFrequency);
+        createHTMLFileParagraphArray(paragraphFrequency, "res/paragraphSorted.html");
     }
 
     /**
@@ -100,8 +108,8 @@ public class App {
      * 
      * @param wordCount
      */
-    private static void createHTMLFileHashmap(HashMap<String, Integer> wordCount) {
-        File file = new File("res/wordCount.html");
+    private static void createHTMLFileHashmap(HashMap<String, Integer> wordCount, String fileName) {
+        File file = new File(fileName);
 
         try {
             FileWriter fileWriter = new FileWriter(file);
@@ -113,7 +121,7 @@ public class App {
             builder.append("<link rel ='stylesheet' href='../res/style.css'>");
             builder.append("</head>");
             builder.append("<body>");
-            builder.append("<h1>Word Count</h1>");
+            builder.append("<h1>Original Word Count</h1>");
             builder.append("<table>");
             for (String key : wordCount.keySet()) {
                 builder.append("<tr>");
@@ -160,8 +168,8 @@ public class App {
      * 
      * @param frequency
      */
-    private static void createHTMLFileArray(ArrayList<WordFrequency> frequency) {
-        File file = new File("res/sorted.html");
+    private static void createHTMLFileArray(ArrayList<WordFrequency> frequency, String filename) {
+        File file = new File(filename);
 
         try {
             FileWriter fileWriter = new FileWriter(file);
@@ -169,16 +177,84 @@ public class App {
             builder.append("<!DOCTYPE html>");
             builder.append("<html>");
             builder.append("<head>");
-            builder.append("<title>Word Count</title>");
+            builder.append("<title>Sorted Count</title>");
             builder.append("<link rel ='stylesheet' href='../res/style.css'>");
             builder.append("</head>");
             builder.append("<body>");
-            builder.append("<h1>Word Count</h1>");
+            builder.append("<h1>Sorted Word Count</h1>");
             builder.append("<table>");
             for (WordFrequency wordFrequency : frequency) {
                 builder.append("<tr>");
                 builder.append("<td>" + wordFrequency.getWord() + "</td>");
                 builder.append("<td>" + wordFrequency.getFrequency() + "</td>");
+                builder.append("</tr>");
+            }
+            builder.append("</table>");
+            builder.append("</body>");
+            builder.append("</html>");
+            fileWriter.append(builder.toString());
+            fileWriter.close();
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+    }
+
+    /**
+     * 
+     * Constructs a HashMap with paragraph count frequencies from an ArrayList of
+     * paragraphs.
+     * The method takes an ArrayList of String containing the paragraphs to count.
+     * The
+     * method iterates through the ArrayList, adding each paragraph to a HashMap and
+     * incrementing its count each time it appears. If the paragraph already exists
+     * in
+     * the HashMap, its count is incremented by 1. Otherwise, a new entry is added
+     * with a count of 1. The resulting HashMap is returned.
+     * 
+     * @param paragraphs
+     * @return
+     */
+    private static ArrayList<ParagraphFrequency> buildParagraphFrequencyList(HashMap<String, Integer> paragraphCount) {
+        ArrayList<ParagraphFrequency> paragraphFrequencyList = new ArrayList<>();
+        for (String key : paragraphCount.keySet()) {
+            paragraphFrequencyList.add(new ParagraphFrequency(key, paragraphCount.get(key)));
+        }
+        return paragraphFrequencyList;
+    }
+
+    /**
+     * 
+     * Creates an HTML file with filename passed as parameter that displays the word
+     * frequency
+     * count. The method takes an ArrayList of ParagraphFrequency objects that
+     * contain
+     * the words and their corresponding frequency count. The method creates the
+     * HTML file and includes a CSS file. The method then
+     * creates a table with two columns: one for the word and one for its frequency
+     * count. The data for the table is obtained from the ArrayList passed as a
+     * parameter. If there is an I/O exception, it will print the stack trace.
+     * 
+     * @param frequency
+     */
+    private static void createHTMLFileParagraphArray(ArrayList<ParagraphFrequency> frequency, String filename) {
+        File file = new File(filename);
+
+        try {
+            FileWriter fileWriter = new FileWriter(file);
+            StringBuilder builder = new StringBuilder();
+            builder.append("<!DOCTYPE html>");
+            builder.append("<html>");
+            builder.append("<head>");
+            builder.append("<title>Paragraph Count</title>");
+            builder.append("<link rel ='stylesheet' href='../res/style.css'>");
+            builder.append("</head>");
+            builder.append("<body>");
+            builder.append("<h1>Sorted Paragraph Count</h1>");
+            builder.append("<table>");
+            for (ParagraphFrequency paragraphFrequency : frequency) {
+                builder.append("<tr>");
+                builder.append("<td>" + paragraphFrequency.getWord() + "</td>");
+                builder.append("<td>" + paragraphFrequency.getFrequency() + "</td>");
                 builder.append("</tr>");
             }
             builder.append("</table>");
